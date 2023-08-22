@@ -1,6 +1,7 @@
+import { Resolvers } from 'resolvers-types.generated';
 import Query from './resolvers/Query';
 
-const resolvers = {
+const resolvers: Resolvers = {
     Query,
   }
 

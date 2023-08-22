@@ -1,4 +1,6 @@
-const queryTwitterResolver = {
+import { QueryResolvers } from "resolvers-types.generated"
+
+const queryTwitterResolver: QueryResolvers = {
     currentUser: () => {
       return {
         id: "123",
