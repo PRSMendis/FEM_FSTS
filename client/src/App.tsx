@@ -76,9 +76,15 @@ const App: React.FC = () => {
     .map((f) => f.tweet?.id)
     .filter(isDefined);
 
+    const { loading, error, data } = useGetCurrentUserQuery()
+    if (loading) return <p>Loading...</p>
+    if (error) return <p>Error: {error}</p>
+    if (!data) return <p>No data.</p>
+    const { currentUser, suggestions = [] } = data
+
   return (
     <div>
-      <LeftSidebar currentUser={CURRENT_USER} />
+      <LeftSidebar currentUser={{...CURRENT_USER, ...currentUser}} />
       <Header currentUser={CURRENT_USER} />
 
       <div id="container" className="wrapper nav-closed">
@@ -86,7 +92,7 @@ const App: React.FC = () => {
           currentUserId={CURRENT_USER.id}
           currentUserFavorites={favorites}
         />
-        <RightBar trends={TRENDS} suggestions={SUGGESTIONS} />
+        <RightBar trends={TRENDS} suggestions={suggestions} />
       </div>
     </div>
   );
