@@ -4,6 +4,8 @@ import Header from './Header';
 import LeftSidebar from './LeftSidebar';
 import RightBar from './RightBar';
 import Timeline from './Timeline';
+import { gql } from "@apollo/client"
+import { useGetCurrentUserQuery } from "./generated/graphql"
 
 const CURRENT_USER = {
   name: 'Stu Dent',
@@ -49,6 +51,24 @@ const SUGGESTIONS = [
     reason: 'Because you follow @MichaelLNorth',
   },
 ];
+
+export const GET_CURRENT_USER = gql`
+  query GetCurrentUser {
+    currentUser {
+      id
+      name
+      handle
+      avatarUrl
+      createdAt
+    }
+    suggestions {
+      name
+      handle
+      avatarUrl
+      reason
+    }
+  }
+`
 
 const App: React.FC = () => {
   const { favorites: rawFavorites } = CURRENT_USER;
