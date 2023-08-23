@@ -7,7 +7,7 @@ import Timeline from './Timeline';
 import { gql } from "@apollo/client"
 import { useGetCurrentUserQuery } from "./generated/graphql"
 
-const CURRENT_USER = {
+const currentUser = {
   name: 'Stu Dent',
   handle: 'student',
   avatarUrl: 'http://localhost:3000/static/egg.jpeg',
@@ -52,7 +52,7 @@ const SUGGESTIONS = [
   },
 ];
 
-export const GET_CURRENT_USER = gql`
+export const GET_currentUser = gql`
   query GetCurrentUser {
     currentUser {
       id
@@ -65,6 +65,11 @@ export const GET_CURRENT_USER = gql`
         followingCount
         followerCount
       }
+      favorites {
+        tweet {
+          id
+        }
+      }
     }
     suggestions {
       name
@@ -76,25 +81,26 @@ export const GET_CURRENT_USER = gql`
 `
 
 const App: React.FC = () => {
-  const { favorites: rawFavorites } = CURRENT_USER;
+  const { loading, error, data } = useGetCurrentUserQuery()
+  if (loading) return <p>Loading...</p>
+  if (error) return <p>Error: {error}</p>
+  if (!data) return <p>No data.</p>
+  const { currentUser, suggestions = [] } = data
+  
+  const { favorites: rawFavorites } = currentUser;
   const favorites = (rawFavorites || [])
     .map((f) => f.tweet?.id)
     .filter(isDefined);
-
-    const { loading, error, data } = useGetCurrentUserQuery()
-    if (loading) return <p>Loading...</p>
-    if (error) return <p>Error: {error}</p>
-    if (!data) return <p>No data.</p>
-    const { currentUser, suggestions = [] } = data
+    console.log({favorites: currentUser.favorites});
 
   return (
     <div>
-      <LeftSidebar currentUser={{...CURRENT_USER, ...currentUser}} />
+      <LeftSidebar currentUser={{...currentUser}} />
       <Header currentUser={currentUser} />
 
       <div id="container" className="wrapper nav-closed">
         <Timeline
-          currentUserId={CURRENT_USER.id}
+          currentUserId={currentUser.id}
           currentUserFavorites={favorites}
         />
         <RightBar trends={TRENDS} suggestions={suggestions} />

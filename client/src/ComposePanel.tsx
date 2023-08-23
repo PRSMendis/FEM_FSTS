@@ -9,6 +9,7 @@ import * as React from 'react';
 import { gql } from "@apollo/client"
 import { useCreateNewTweetMutation } from "./generated/graphql"
 import { GET_TIMELINE_TWEETS } from './Timeline';
+import { GET_CURRENT_USER } from './App';
 
 export interface ComposePanelProps {
   currentUser: { id: string };
@@ -37,7 +38,7 @@ const ComposePanel: React.FC<ComposePanelProps> = ({ currentUser }) => {
     const body = textarea.value;
     createNewTweet({
       variables: {userId: currentUser.id, body: body},
-      refetchQueries: [GET_TIMELINE_TWEETS]}).then(() => {
+      refetchQueries: [GET_TIMELINE_TWEETS, GET_CURRENT_USER]}).then(() => {
         textarea.value = '';
     })
     .catch((error: unknown) => {
