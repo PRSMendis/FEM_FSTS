@@ -3,6 +3,7 @@ import Query from './resolvers/Query';
 import Db, { DbTweet, DbUser } from './db';
 import Tweet from './resolvers/Tweet';
 import User from './resolvers/User';
+import Mutation from './resolvers/Mutation';
 
 export interface TwitterResolverContext {
     db: Db,
@@ -11,8 +12,9 @@ export interface TwitterResolverContext {
     dbTweetToFavoriteCountMap: Record<string, number>,
   }
 const resolvers: Resolvers<TwitterResolverContext> =  {
-    Query,
+    Query, 
     Tweet,
+    Mutation,
     User,
   }
 
